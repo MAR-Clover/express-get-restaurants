@@ -4,6 +4,11 @@ const port = 3000;
 
 //TODO: Create your GET Request Route Below: 
 
+// app.get('/restaurants', (req, res) => {
+   
+//     res.json(restaurants);
+//   });
+
 
 app.listen(port, () => {
     db.sync();
