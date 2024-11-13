@@ -1,13 +1,29 @@
 const express = require("express");
 const router = express.Router();
-const Restaurant = require("../models/Restaurant")
+const {Restaurant, Menu, Item} = require("../models/index")
 
 // Define your Express router to be able to handle creating, reading, updating, and deleting resources from your Restaurants database.
 
 //reading all restaurants
 router.get("/", async (req,res) => {
+
     try{
-        const allRestaurants = await Restaurant.findAll()
+        const allRestaurants = await Restaurant.findAll({
+            include: [
+                {
+                    model: Menu, 
+                    include: [
+                        {
+                            model: Item, 
+                            through: { MenuItem: [] }, 
+                        },
+                    ],
+                },
+            ],
+        });
+        
+        
+        // const allRestaurants = await Restaurant.findAll()
         res.status(200)
         res.json(allRestaurants)
         
