@@ -1,8 +1,35 @@
 const request = require("supertest");
 const app = require("./src/app");
-const Restaurant = require("./models");
+const Restaurant = require("./models/Restaurant");
 
-
+describe("express validator checks for /post restaurant", () => {
+    it("should return error when name isn't passed", async () => {
+      // Create new restaurant without 'name'
+      const newRestaurant = {
+        location: 'Georgia',
+        cuisine: 'mexican',
+      };
+  
+      const response = await request(app).post("/restaurants").send(newRestaurant);
+  
+      // Log the response body to inspect
+      console.log(response.body);
+  
+      // Expect the response status to be 400 (bad request)
+      expect(response.status).toBe(400);
+  
+      // Expect the response body to have an error related to the 'name' field
+      expect(response.body.error).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            msg: "Name is required",  // Custom error message you set
+            path: "name",             // The field that failed (use 'path' instead of 'param')
+          })
+        ])
+      );
+    });
+  });
+  
 describe("verifying get route for restaurant", () => {
     it("should return status code of 200", async () => {
         const response = await request(app).get("/restaurants");
