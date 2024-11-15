@@ -28,6 +28,48 @@ describe("express validator checks for /post restaurant", () => {
         ])
       );
     });
+
+    it("should return error when name length is below 10 or above 30", async () => {
+        const restaurant1 = {
+            name:"Sal's",
+            location:"New Jersey",
+            cuisine:"Italian",
+            createdAt: "2024-11-13T17:25:05.434Z",
+            updatedAt: "2024-11-13T17:25:05.434Z"
+        }
+
+        const restaurant2 = {
+            name:"Salvatore's great big restaurant with lots of food",
+            location:"New Jersey",
+            cuisine:"Italian",
+            createdAt: "2024-11-13T17:25:05.434Z",
+            updatedAt: "2024-11-13T17:25:05.434Z"
+        }
+
+        //check for below 10 name length
+        const response = await request(app).post("/restaurants").send(restaurant1)
+        
+         //check for below 10 name length
+        const response2= await request(app).post("/restaurants").send(restaurant1)
+
+        expect(response.body.error).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                msg: "Name must be between 10 and 30 characters",  
+                path: "name",             
+              })
+            ])
+          );
+
+          expect(response2.body.error).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                msg: "Name must be between 10 and 30 characters",  
+                path: "name",             
+              })
+            ])
+          );
+    });
   });
   
 describe("verifying get route for restaurant", () => {

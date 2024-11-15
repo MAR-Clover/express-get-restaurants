@@ -46,6 +46,7 @@ router.post(
     check("name").not().isEmpty().withMessage("Name is required").trim(),
     check("location").not().isEmpty().withMessage("Location is required").trim(),
     check("cuisine").not().isEmpty().withMessage("Cuisine is required").trim(),
+    check("name").isLength({min:10,max:30}).withMessage("Name must be between 10 and 30 characters").trim(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
